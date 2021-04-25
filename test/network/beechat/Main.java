@@ -7,7 +7,7 @@ import java.nio.charset.StandardCharsets;
 public class Main {
 
     public static void main(String[] args) throws FileNotFoundException{
-        String message = "example message for verification";
+        String message = new String("example message for verification");
         Base58 b58 = new Base58();
         byte[] pk = new byte[Dilithium.CRYPTO_PUBLICKEYBYTES];
         byte[] sk = new byte[Dilithium.CRYPTO_SECRETKEYBYTES];
@@ -34,7 +34,7 @@ public class Main {
 
 
         // Step 2: Signing message
-        long smlen = Dilithium.crypto_sign(sm, message.toCharArray(), message.length(), sk);
+        long smlen = Dilithium.crypto_sign(sm, message.getBytes(), message.length(), sk);
 
         System.out.println("\nOriginal message:\n" + message);
         testOutput = new String(b58.encode(sm));
@@ -77,7 +77,7 @@ public class Main {
 
 
         // Step 2: Signing message
-        smlen = DilithiumAes.crypto_sign(sm, message.toCharArray(), message.length(), sk);
+        smlen = DilithiumAes.crypto_sign(sm, message.getBytes(), message.length(), sk);
 
         System.out.println("\nOriginal message:\n" + message);
         testOutput = new String(b58.encode(sm));

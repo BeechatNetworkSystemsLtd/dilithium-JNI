@@ -12,7 +12,7 @@ public class DilithiumAes {
 
     // Declare a native methods
     public static native int crypto_sign_keypair(byte []pk, byte []sk);
-    public static native int crypto_sign(byte []sm, char []m, long mlen, byte []sk);
+    public static native int crypto_sign(byte []sm, byte []m, long mlen, byte []sk);
     public static native int crypto_sign_open(byte []m, byte []sm, long smlen, byte []pk);
 
 }
