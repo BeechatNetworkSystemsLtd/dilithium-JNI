@@ -8,8 +8,15 @@ find_package(Java)
 find_package(Java COMPONENTS Development)
 
 if(MSVC)
+  add_compile_options(/I${_JAVA_HOME}\\include /I${_JAVA_HOME}\\include\\win32)
   add_compile_options(/nologo /O2 /W4 /wd4146 /wd4244)
-  add_compile_options(/I${_JAVA_HOME}\include /I${_JAVA_HOME}\include\linux)
+endif()
+
+if(MSYS OR MINGW)
+  add_compile_options(-I${_JAVA_HOME}\\include -I${_JAVA_HOME}\\include\\win32)
+  add_compile_options(-Wall -fPIC -Wextra -Wpedantic -Werror)
+  add_compile_options(-Wmissing-prototypes -Wredundant-decls -Wshadow -Wpointer-arith)
+  add_compile_options(-O3 -fomit-frame-pointer)
 else()
   add_compile_options(-I${_JAVA_HOME}/include -I${_JAVA_HOME}/include/linux)
   add_compile_options(-Wall -fPIC -Wextra -Wpedantic -Werror)
@@ -36,15 +43,24 @@ add_custom_command(
   TARGET dilithium2aes_ref_jni POST_BUILD
   COMMAND ${CMAKE_COMMAND} -E make_directory ${CMAKE_BINARY_DIR}/Release/ref
 )
+
 if (MSVC)
   add_custom_command(
     TARGET dilithium2aes_ref_jni POST_BUILD
     COMMAND ${CMAKE_COMMAND} -E copy "dilithium2aes_ref_jni.dll" "${CMAKE_BINARY_DIR}/Release"
     COMMENT "Making Release: dilithium2aes_ref_jni.dll"
   )
-else()
+endif()
+if (MSYS OR MINGW)
   add_custom_command(
-    TARGET dilithium2_ref_jni POST_BUILD
+    TARGET dilithium2aes_ref_jni POST_BUILD
+    COMMAND ${CMAKE_COMMAND} -E copy "libdilithium2aes_ref_jni.dll" "${CMAKE_BINARY_DIR}/Release"
+    COMMENT "Making Release: libdilithium2aes_ref_jni.dll"
+  )
+endif()
+if(UNIX)
+  add_custom_command(
+    TARGET dilithium2aes_ref_jni POST_BUILD
     COMMAND ${CMAKE_COMMAND} -E copy "libdilithium2aes_ref_jni.so" "${CMAKE_BINARY_DIR}/Release"
     COMMENT "Making Release: libdilithium2aes_ref_jni.so"
   )
@@ -56,7 +72,15 @@ if (MSVC)
     COMMAND ${CMAKE_COMMAND} -E copy "dilithium2_ref_jni.dll" "${CMAKE_BINARY_DIR}/Release"
     COMMENT "Making Release: dilithium2_ref_jni.dll"
   )
-else()
+endif()
+if (MSYS OR MINGW)
+  add_custom_command(
+    TARGET dilithium2_ref_jni POST_BUILD
+    COMMAND ${CMAKE_COMMAND} -E copy "libdilithium2_ref_jni.dll" "${CMAKE_BINARY_DIR}/Release"
+    COMMENT "Making Release: libdilithium2_ref_jni.dll"
+  )
+endif()
+if(UNIX)
   add_custom_command(
     TARGET dilithium2_ref_jni POST_BUILD
     COMMAND ${CMAKE_COMMAND} -E copy "libdilithium2_ref_jni.so" "${CMAKE_BINARY_DIR}/Release"
