@@ -39,10 +39,16 @@ public class Main {
         System.out.println("\nOriginal message:\n" + message);
         testOutput = new String(b58.encode(sm));
         System.out.println("\nSigned message:\n" + testOutput);
+        try (FileWriter writer = new FileWriter("signed.message", false)) {
+            writer.write(testOutput);
+            writer.flush();
+            writer.close();
+        } catch (IOException ex){}
 
         // Step 3: Checking message
         Scanner sc = new Scanner(new File("key.public"));
-        rc = Dilithium.crypto_sign_open(m, sm, smlen, b58.decode(sc.nextLine()));
+        Scanner sc2 = new Scanner(new File("signed.message"));
+        rc = Dilithium.crypto_sign_open(m, b58.decode(sc2.nextLine()), smlen, b58.decode(sc.nextLine()));
 
         System.out.println("\nRestored message:\n" + new String(m));
 
@@ -82,10 +88,16 @@ public class Main {
         System.out.println("\nOriginal message:\n" + message);
         testOutput = new String(b58.encode(sm));
         System.out.println("\nSigned message:\n" + testOutput);
+        try (FileWriter writer = new FileWriter("signed.message.aes", false)) {
+            writer.write(testOutput);
+            writer.flush();
+            writer.close();
+        } catch (IOException ex){}
 
         // Step 3: Checking message
         sc = new Scanner(new File("key.public"));
-        rc = DilithiumAes.crypto_sign_open(m, sm, smlen, b58.decode(sc.nextLine()));
+        sc2 = new Scanner(new File("signed.message.aes"));
+        rc = DilithiumAes.crypto_sign_open(m, b58.decode(sc2.nextLine()), smlen, b58.decode(sc.nextLine()));
 
         System.out.println("\nRestored message:\n" + new String(m));
 
