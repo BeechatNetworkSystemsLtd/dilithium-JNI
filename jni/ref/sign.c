@@ -246,7 +246,7 @@ JNIEXPORT jint JNICALL Java_network_beechat_Dilithium_crypto_1sign
   free(sm);
   free(m);
   free(_smj);
-  free(_mj);
+  //free(_mj);
 
   return smlen;
 }
