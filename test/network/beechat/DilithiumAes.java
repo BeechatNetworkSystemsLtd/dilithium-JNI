@@ -7,7 +7,7 @@ public class DilithiumAes {
     static final int CRYPTO_BYTES = 2420;
 
     static {
-        System.loadLibrary("libdilithium2aes_ref_jni");
+        System.loadLibrary("dilithium2aes_ref_jni");
     }
 
     // Declare a native methods

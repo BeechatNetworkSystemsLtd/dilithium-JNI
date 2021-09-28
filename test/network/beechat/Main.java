@@ -12,7 +12,7 @@ public class Main {
         byte[] pk = new byte[Dilithium.CRYPTO_PUBLICKEYBYTES];
         byte[] sk = new byte[Dilithium.CRYPTO_SECRETKEYBYTES];
         byte[] sm = new byte[Dilithium.CRYPTO_BYTES + message.length()];
-        byte[] m = new byte[Dilithium.CRYPTO_BYTES + message.length()];
+        byte[] m = new byte[message.length()];
 
         // Step 1: Create key pair
         int rc = Dilithium.crypto_sign_keypair(pk, sk);
@@ -50,7 +50,9 @@ public class Main {
         Scanner sc2 = new Scanner(new File("signed.message"));
         rc = Dilithium.crypto_sign_open(m, b58.decode(sc2.nextLine()), smlen, b58.decode(sc.nextLine()));
 
-        System.out.println("\nRestored message:\n" + new String(m));
+        try {
+            System.out.println("\nRestored message:\n" + new String(m, "ISO-8859-1"));
+        } catch (UnsupportedEncodingException ex){}
 
         if (rc != -1) {
             System.out.println("\nSuccess!");
@@ -99,7 +101,9 @@ public class Main {
         sc2 = new Scanner(new File("signed.message.aes"));
         rc = DilithiumAes.crypto_sign_open(m, b58.decode(sc2.nextLine()), smlen, b58.decode(sc.nextLine()));
 
-        System.out.println("\nRestored message:\n" + new String(m));
+        try {
+            System.out.println("\nRestored message:\n" + new String(m, "ISO-8859-1"));
+        } catch (UnsupportedEncodingException ex){}
 
         if (rc != -1) {
             System.out.println("\nSuccess!");
